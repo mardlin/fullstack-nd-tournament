@@ -114,20 +114,43 @@ def reportMatch(winner, loser):
     
  
  
-# def swissPairings():
-#     """Returns a list of pairs of players for the next round of a match.
+def swissPairings():
+    """Returns a list of pairs of players for the next round of a match.
   
-#     Assuming that there are an even number of players registered, each player
-#     appears exactly once in the pairings.  Each player is paired with another
-#     player with an equal or nearly-equal win record, that is, a player adjacent
-#     to him or her in the standings.
+    Assuming that there are an even number of players registered, each player
+    appears exactly once in the pairings.  Each player is paired with another
+    player with an equal or nearly-equal win record, that is, a player adjacent
+    to him or her in the standings.
   
-#     Returns:
-#       A list of tuples, each of which contains (id1, name1, id2, name2)
-#         id1: the first player's unique id
-#         name1: the first player's name
-#         id2: the second player's unique id
-#         name2: the second player's name
-#     """
+    Returns:
+      A list of tuples, each of which contains (id1, name1, id2, name2)
+        id1: the first player's unique id
+        name1: the first player's name
+        id2: the second player's unique id
+        name2: the second player's name
+    """
+    
+    standings = playerStandings()
+    matches = [ ]
+    index = 1
+    for (i, n, w, m) in standings:
+        # start a new tuple when i is odd
+        if ( index % 2 == 1):
+            player1 = ()
+            player1 += (i, n,)
+            print index, player1
+        # add to the tuple when i is even, then append to the list
+        if ( index % 2 == 0):
+            player2 = ()
+            player2 += (i, n,)
+            matches.append(player1 + player2)    
+            print index, player2
+        index += 1
+    # print matches
+    return matches
+        
+        
+        
+    
 
 

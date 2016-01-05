@@ -86,7 +86,9 @@ def testReportMatches():
     registerPlayer("Boots O'Neal")
     registerPlayer("Cathy Burton")
     registerPlayer("Diane Grant")
+    # playerStandings returns list of tuples (id, name, wins, matches)
     standings = playerStandings()
+    # this gets the id for each player, in order of rank
     [id1, id2, id3, id4] = [row[0] for row in standings]
     reportMatch(id1, id2)
     reportMatch(id3, id4)

@@ -30,8 +30,8 @@ CREATE TABLE players (
 
 CREATE TABLE matches (
     id SERIAL PRIMARY KEY,
-    winner TEXT,
-    loser TEXT
+    winner INTEGER,
+    loser INTEGER
 );
 
 GRANT ALL PRIVILEGES ON TABLE matches TO ubuntu;
@@ -49,40 +49,44 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public to ubuntu;
 -- Create a view with at least one row for each player, and one row for
 -- each of their wins.
 
+-- Create a view returning the count of a player's wins
 CREATE VIEW win_counts AS 
-    SELECT name, COUNT(winner) AS wins                                        
+    SELECT id, COUNT(winner) AS wins                                        
         FROM (
             -- Left join players with all their winning matches
             SELECT players.id, players.name, matches.winner
             FROM players LEFT JOIN matches 
-            ON players.name = matches.winner
+            ON players.id = matches.winner
             ) AS players_wins
-        GROUP BY name
+        GROUP BY id
         ORDER BY wins DESC;
     
-
+-- Create a view returning the count of a player's matches
 CREATE VIEW match_counts AS
-    SELECT name, COUNT(winner) AS matches_played
+    SELECT id, COUNT(winner) AS matches_played
     FROM (
         -- LEFT join players with all their matches played
         SELECT players.id, players.name, matches.winner, matches.loser
         FROM players LEFT JOIN matches
-        ON ( players.name = matches.winner OR players.name = matches.loser)
+        ON ( players.id = matches.winner OR players.id = matches.loser)
         ) AS players_matches
-    GROUP BY name
+    GROUP BY id
     ORDER BY matches_played DESC;
 
+-- Create a view joining the players wins to the players table
 CREATE VIEW players_win_counts AS
     SELECT players.id, players.name, win_counts.wins
         FROM players LEFT JOIN win_counts
-        ON players.name = win_counts.name;
+        ON players.id = win_counts.id;
 
+-- Create a view joining all the previous views together
+-- This will give a table with columns:  (id, name, wins, matches_played)
 CREATE VIEW players_standings AS
-    SELECT players_win_counts.id, players_win_counts.name, players_win_counts.wins, match_counts.matches_played
+    SELECT players_win_counts.id, players_win_counts.name, 
+        players_win_counts.wins, match_counts.matches_played
         FROM players_win_counts LEFT JOIN match_counts
-        ON players_win_counts.name = match_counts.name
+        ON players_win_counts.id = match_counts.id
         ORDER BY players_win_counts.wins DESC;
-
 
 GRANT ALL PRIVILEGES ON players_standings TO ubuntu;
 
