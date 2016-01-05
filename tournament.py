@@ -20,6 +20,7 @@ def connect():
 
 def deleteMatches():
     """Remove all the match records from the database."""
+    # Excessive commenting, just for the first one:
     # create the DB connection
     DB = connect()
     # create the cursor
@@ -88,7 +89,7 @@ def playerStandings():
     DB = connect()
     cursor = DB.cursor()
     
-    # All the SQL magic is in tournament.sql
+    # All the SQL magic is in the views of tournament.sql
     command = "select * from players_standings;"
     
     cursor.execute(command)
@@ -133,6 +134,7 @@ def swissPairings():
     standings = playerStandings()
     matches = [ ]
     index = 1
+    # Work through the standings two at a time to build the tuples.
     for (i, n, w, m) in standings:
         # start a new tuple when i is odd
         if ( index % 2 == 1):
