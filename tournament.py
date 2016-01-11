@@ -25,18 +25,9 @@ def connect(database_name = "tournament"):
 
 def deleteMatches():
     """Remove all the match records from the database."""
-<<<<<<< HEAD
     # create the DB connection and cursor
     db, cursor = connect()
     # Define and execute the SQL command string
-=======
-    # Excessive commenting, just for the first one:
-    # create the DB connection
-    DB = connect()
-    # create the cursor
-    cursor = DB.cursor()
-    # Define and execture the SQL command string
->>>>>>> master
     command = " DELETE FROM matches; "
     cursor.execute(command)
     # Commit the change
@@ -97,15 +88,8 @@ def playerStandings(limit=None, offset=None):
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-<<<<<<< HEAD
+
     db, cursor = connect()
-=======
-    DB = connect()
-    cursor = DB.cursor()
-    
-    # All the SQL magic is in the views of tournament.sql
-    command = "select * from players_standings;"
->>>>>>> master
     
     # The players_standing view is created in tournament.sql
     # The following lines build out the rest of the query according to the 
