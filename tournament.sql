@@ -25,13 +25,14 @@ DROP TABLE IF EXISTS matches;
 
 CREATE TABLE players (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT NOT NULL
 );
 
 CREATE TABLE matches (
     id SERIAL PRIMARY KEY,
-    winner INTEGER,
-    loser INTEGER
+    winner INT REFERENCES players (id) ON DELETE CASCADE,
+    loser INT REFERENCES players (id) ON DELETE CASCADE,
+    CHECK (winner <> loser)
 );
 
 GRANT ALL PRIVILEGES ON TABLE matches TO ubuntu;
@@ -87,6 +88,15 @@ CREATE VIEW players_standings AS
         FROM players_win_counts LEFT JOIN match_counts
         ON players_win_counts.id = match_counts.id
         ORDER BY players_win_counts.wins DESC;
+        
+        
+-- Create a view listing all players who have not had a BYE (ie. a match where the 
+-- loser is NULL)
+CREATE VIEW players_w_byes AS
+    SELECT players.id              
+    FROM players, matches
+    WHERE players.id = winner AND matches.loser IS NULL;    
+        
 
 GRANT ALL PRIVILEGES ON players_standings TO ubuntu;
-
+GRANT ALL PRIVILEGES ON players_w_byes TO ubuntu;
